@@ -26,11 +26,13 @@ function FormTemplate() {
         const emailsCollection = firebase.firestore().collection('emails');
         emailsCollection.add(formData)
         .then(() => {
-            console.log('Datos enviados')
+            console.log('Datos enviados', formData)
         })
         .catch((err) => {
             console.log('Algo paso', err)
         })
+
+        e.target.reset();
     }
 
     return (

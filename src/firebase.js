@@ -3,7 +3,6 @@ import 'firebase/compat/auth';
 import 'firebase/compat/database';
 
 const config = {
-  // TUS CREDENCIALES
   };
 
 firebase.initializeApp(config);

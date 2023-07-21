@@ -13,7 +13,6 @@ exports.sendEmail = functions.database.ref('contactForms/{pushId}').onWrite(asyn
     const emaulsRefs = database.collection('emails');
 
     const snap = await emaulsRefs.get();
-    console.log(snap)
 
     snap.forEach((doc) => {
         emailsContainers.push(doc.data().email);
@@ -21,13 +20,11 @@ exports.sendEmail = functions.database.ref('contactForms/{pushId}').onWrite(asyn
 
     const nodemailer = require('nodemailer');
 
-
-
     // aqui deben configurarlo de acuerdo a los datos de su empresa
     // recuerden que la configuracion la hacen en un archivo .env
     // como el user y el pass
     const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
+        host: 'gmail',
         port: 587,
         secure: false,
         auth: {
