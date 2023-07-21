@@ -1,5 +1,6 @@
 import { useState } from "react"
 import firebase from "../firebase";
+import 'firebase/compat/firestore';
 
 function FormTemplate() {
 
@@ -21,14 +22,15 @@ function FormTemplate() {
     const handlerSubmit = (e) => {
         e.preventDefault();
 
-        // contactForms = asi se vera en la url de la base de datos en firebase
-        // por ejemplo: https://form-data-27b19-default-rtdb.firebaseio.com/contactForms
-        // y para mirar en la api en formato json la url seria;
-        // https://form-data-27b19-default-rtdb.firebaseio.com/contactForms.json
-        // en el siguiente codigo se añade el formulario a la base de datos de firebase
-        // cada envio de formulario se hace un nodo diferente
-        const databaseRef = firebase.database().ref('contactForms');
-        databaseRef.push(formData);
+        // Aui se usa el firestore, se aquiere la colleccion y se alade la nueva
+        const emailsCollection = firebase.firestore().collection('emails');
+        emailsCollection.add(formData)
+        .then(() => {
+            console.log('Datos enviados')
+        })
+        .catch((err) => {
+            console.log('Algo paso', err)
+        })
     }
 
     return (

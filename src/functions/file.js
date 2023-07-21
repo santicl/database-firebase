@@ -3,9 +3,21 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-exports.sendEmail = functions.database.ref('contactForms/{pushId}').onWrite((change, context) => {
+exports.sendEmail = functions.database.ref('contactForms/{pushId}').onWrite(async (change, context) => {
     const formData = change.after.val();
     const { name, email, cel } = formData;
+    const emailsContainers = [];
+
+    const database = admin.firestore();
+
+    const emaulsRefs = database.collection('emails');
+
+    const snap = await emaulsRefs.get();
+    console.log(snap)
+
+    snap.forEach((doc) => {
+        emailsContainers.push(doc.data().email);
+    })
 
     const nodemailer = require('nodemailer');
 
@@ -26,7 +38,7 @@ exports.sendEmail = functions.database.ref('contactForms/{pushId}').onWrite((cha
 
     const mailOptions = {
         from: `"${name}" <${email}`,
-        to: 'correodeempresa@gmail.com', // Correo de empresa
+        to: emailsContainers.join(', '), // Correo de empresa
         subject: 'Nuevo asunto',
         text: cel
     }
